@@ -1,2 +1,5 @@
+/* jshint esversion:6 */
 /* IMPORTS */
-const files = require('fs');
+const { argv } = require('./config/comando');
+
+console.log(argv);

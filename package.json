@@ -1,0 +1,22 @@
+{
+  "name": "buscaminas",
+  "version": "1.0.0",
+  "description": "Calcula el tablero de buscaminas",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Andrew0914/buscaminas.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Andrew0914/buscaminas/issues"
+  },
+  "homepage": "https://github.com/Andrew0914/buscaminas#readme",
+  "dependencies": {
+    "yargs": "^13.2.2"
+  }
+}

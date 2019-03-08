@@ -49,9 +49,16 @@ const validarTablero = (contenido) => {
 
 };
 
+/**
+ * Calcula las posicioens de los casillas y las minas
+ * @param {string} contenido 
+ */
 const generaTablero = (contenido) => {
-    const tablero = contenido.split('\r\n');
-    for (let i = 1; i < tablero.length; i++) {
+    let tablero = contenido.split('\r\n');
+    tablero = tablero.splice(1, (tablero.length - 1));
+    console.log(tablero);
+    let result = '';
+    for (let i = 0; i < tablero.length; i++) {
         let contador = 0;
         let fila = tablero[i].split('');
         for (let c = 0; c < fila.length; c++) {
@@ -61,10 +68,9 @@ const generaTablero = (contenido) => {
                     contador++;
                 }
                 // inferior
-                if (tablero[i + 1] && tablero[i - 1][c] === '*') {
+                if (tablero[i + 1] && tablero[i + 1][c] === '*') {
                     contador++;
                 }
-
                 // derecha
                 if (fila[c + 1] && fila[c + 1] === '*') {
                     contador++;
@@ -95,12 +101,17 @@ const generaTablero = (contenido) => {
                         contador++;
                     }
                 }
-
+                result += contador;
+            } else {
+                result += '*';
             }
 
+            contador = 0;
         }
+        result += '\n';
     }
 
+    return result;
 };
 
 /**
@@ -127,7 +138,8 @@ const calcularMinas = (pathArchivo) => {
             return;
         }
 
-        generaTablero(contenido);
+        let tablero = generaTablero(contenido);
+        console.log(tablero);
     });
 };
 

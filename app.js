@@ -49,7 +49,36 @@ const validarTablero = (contenido) => {
 
 };
 
+const generaTablero = (contenido) => {
+    const tablero = contenido.split('\r\n');
+    for (let i = 1; i < tablero.length; i++) {
+        let contador = 0;
+        let fila = tablero[i].split('');
+        for (let c = 0; c < fila.length; c++) {
+            if (fila[c] === '.') {
+                // superior
+                if (tablero[i - 1] && tablero[i - 1][c] === '*') {
+                    contador++;
+                }
+                // inferior
+                if (tablero[i + 1] && tablero[i - 1][c] === '*') {
+                    contador++;
+                }
 
+                // derecha
+                if (fila[c + 1] && fila[c - 1] === '*') {
+                    contador++;
+                }
+                //izquierda
+                if (fila[c - 1] && fila[c - 1] === '*') {
+                    contador++;
+                }
+            }
+
+        }
+    }
+
+};
 
 /**
  * Recibe el path del archivo para determinar si existe y es un archivo txt valido
@@ -75,6 +104,7 @@ const calcularMinas = (pathArchivo) => {
             return;
         }
 
+        generaTablero(contenido);
     });
 };
 

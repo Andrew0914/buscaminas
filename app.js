@@ -66,13 +66,36 @@ const generaTablero = (contenido) => {
                 }
 
                 // derecha
-                if (fila[c + 1] && fila[c - 1] === '*') {
+                if (fila[c + 1] && fila[c + 1] === '*') {
                     contador++;
                 }
                 //izquierda
                 if (fila[c - 1] && fila[c - 1] === '*') {
                     contador++;
                 }
+                //esquinas superiores
+                if (tablero[i - 1]) {
+                    // esquina sizq
+                    if (tablero[i - 1][c - 1] && tablero[i - 1][c - 1] === '*') {
+                        contador++;
+                    }
+                    // esquiba sder
+                    if (tablero[i - 1][c + 1] && tablero[i - 1][c + 1] === '*') {
+                        contador++;
+                    }
+                }
+                //esquinas inferiores
+                if (tablero[i + 1]) {
+                    // esquina iizq
+                    if (tablero[i + 1][c - 1] && tablero[i + 1][c - 1] === '*') {
+                        contador++;
+                    }
+                    // esquiba ider
+                    if (tablero[i + 1][c + 1] && tablero[i + 1][c + 1] === '*') {
+                        contador++;
+                    }
+                }
+
             }
 
         }

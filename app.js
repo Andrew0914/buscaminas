@@ -23,7 +23,7 @@ const validarTablero = (contenido) => {
 
     // validamos la dimesion x o filas  que sea correcta con la dada
     if (xDimension !== (tablero.length - 1)) {
-        console.log(`Las filas no coinciden con la dimension dada, cantidad de filas ${ tablero.length - 1} dimension dada: ${xDimension}`);
+        console.log(`Las filas no coinciden con la dimension dada, cantidad de filas ${ tablero.length - 1} dimension dada: ${xDimension} sin saltos de linea`);
         return false;
     }
     // validamos la dimension y o culumnas que sea correcta
@@ -56,7 +56,6 @@ const validarTablero = (contenido) => {
 const generaTablero = (contenido) => {
     let tablero = contenido.split('\r\n');
     tablero = tablero.splice(1, (tablero.length - 1));
-    console.log(tablero);
     let result = '';
     for (let i = 0; i < tablero.length; i++) {
         let contador = 0;
@@ -139,6 +138,7 @@ const calcularMinas = (pathArchivo) => {
         }
 
         let tablero = generaTablero(contenido);
+
         console.log(tablero);
     });
 };

@@ -16,11 +16,40 @@ const validarTablero = (contenido) => {
     // validamos que los valores de las dimensiones sean numericos enteros
     const xDimension = Number(cabecera[0]);
     const yDimension = Number(cabecera[1]);
-    if (!Number.isInteger(xDimension) || !Number.isInteger(yDimension)) {
-        console.log('Las dimensiones del tablero deben ser numeros enteros ej: 4 4, su entrada: ' + tablero[0]);
+    if (!Number.isInteger(xDimension) || !Number.isInteger(yDimension) || xDimension <= 0 || yDimension <= 0) {
+        console.log(`Las dimensiones del tablero deben ser numeros enteros mayores que 0 ej: 4 4, su entrada: ${tablero[0]}`);
         return false;
     }
+
+    // validamos la dimesion x o filas  que sea correcta con la dada
+    if (xDimension !== (tablero.length - 1)) {
+        console.log(`Las filas no coinciden con la dimension dada, cantidad de filas ${ tablero.length - 1} dimension dada: ${xDimension}`);
+        return false;
+    }
+    // validamos la dimension y o culumnas que sea correcta
+    for (let i = 1; i < tablero.length; i++) {
+        if (tablero[i].length !== yDimension) {
+            console.log(`Las columnas de la fila ${i} no coinciden con la dimension dada, cantidad de columnas ${tablero[i].length} dimension dada: ${yDimension}`);
+            return false;
+        }
+    }
+
+    // validamos solo caracteres permitidos para minas y casillas
+    for (let i = 1; i < tablero.length; i++) {
+        let fila = tablero[i].split('');
+        for (let f = 0; f < fila.length; f++) {
+            if (fila[f] !== '*' && fila[f] !== '.') {
+                console.log('Los caracteres para las casilas son * -> minas . -> casilla vacia, sin espacion, ejemplo ..*.');
+                return false;
+            }
+        }
+    }
+
+    return true;
+
 };
+
+
 
 /**
  * Recibe el path del archivo para determinar si existe y es un archivo txt valido
@@ -41,7 +70,11 @@ const calcularMinas = (pathArchivo) => {
         }
         // obtenemos y validamos el contenido que sea correcto para ser usado en el programa
         let contenido = data.toString();
-        validarTablero(contenido);
+        if (!validarTablero(contenido)) {
+            console.log('No se pudo calcular');
+            return;
+        }
+
     });
 };
 

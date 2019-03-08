@@ -4,9 +4,27 @@ const { argv } = require('./config/comando');
 const path = require('path');
 const files = require('fs');
 
+/**
+ * Parsea sl string del tablero proveniente del txt
+ * @param {string} contenido 
+ */
+const parseTablero = (contenido) => {
+    let tablero = [];
+    if (contenido.includes('\r\n')) {
+        tablero = contenido.split('\r\n');
+    } else {
+        tablero = contenido.split('\n');
+    }
 
+    return tablero;
+};
+
+/**
+ * Validal a estructura correcta del tablero de minas
+ * @param {string} contenido 
+ */
 const validarTablero = (contenido) => {
-    const tablero = contenido.split('\r\n');
+    let tablero = parseTablero(contenido);
     const cabecera = tablero[0].split(' ');
     // validamos que sean solo 2 dimensiones
     if (cabecera.length !== 2) {
@@ -14,8 +32,8 @@ const validarTablero = (contenido) => {
         return false;
     }
     // validamos que los valores de las dimensiones sean numericos enteros
-    const xDimension = Number(cabecera[0]);
-    const yDimension = Number(cabecera[1]);
+    const xDimension = Number(cabecera[0].trim());
+    const yDimension = Number(cabecera[1].trim());
     if (!Number.isInteger(xDimension) || !Number.isInteger(yDimension) || xDimension <= 0 || yDimension <= 0) {
         console.log(`Las dimensiones del tablero deben ser numeros enteros mayores que 0 ej: 4 4, su entrada: ${tablero[0]}`);
         return false;
@@ -44,9 +62,21 @@ const validarTablero = (contenido) => {
             }
         }
     }
-
     return true;
 
+};
+
+/**
+ * Recibe el arreglo de las casillas adyacentes a una casilla data
+ * y devuelve la cantidad de minas encontradas en ellas.
+ * @param {array} casillas 
+ */
+const detectaMinas = (casillas) => {
+    let minas = 0;
+    for (let casilla of casillas) {
+        minas += (casilla && casilla === '*') ? 1 : 0;
+    }
+    return minas;
 };
 
 /**
@@ -54,64 +84,44 @@ const validarTablero = (contenido) => {
  * @param {string} contenido 
  */
 const generaTablero = (contenido) => {
-    let tablero = contenido.split('\r\n');
+    let tablero = parseTablero(contenido);
     tablero = tablero.splice(1, (tablero.length - 1));
     let result = '';
     for (let i = 0; i < tablero.length; i++) {
-        let contador = 0;
+        let casillas = [];
         let fila = tablero[i].split('');
         for (let c = 0; c < fila.length; c++) {
             if (fila[c] === '.') {
-                // superior
-                if (tablero[i - 1] && tablero[i - 1][c] === '*') {
-                    contador++;
-                }
-                // inferior
-                if (tablero[i + 1] && tablero[i + 1][c] === '*') {
-                    contador++;
-                }
-                // derecha
-                if (fila[c + 1] && fila[c + 1] === '*') {
-                    contador++;
-                }
-                //izquierda
-                if (fila[c - 1] && fila[c - 1] === '*') {
-                    contador++;
-                }
-                //esquinas superiores
+                // colocamos las casillas en un arreglo para que las valide en un ciclo
+                // colocamos las casillas de los lados
+                casillas = [fila[c + 1], fila[c - 1]];
+                //colocamos las casillas superiores 
                 if (tablero[i - 1]) {
-                    // esquina sizq
-                    if (tablero[i - 1][c - 1] && tablero[i - 1][c - 1] === '*') {
-                        contador++;
-                    }
-                    // esquiba sder
-                    if (tablero[i - 1][c + 1] && tablero[i - 1][c + 1] === '*') {
-                        contador++;
-                    }
+                    casillas.push.apply(casillas, [
+                        tablero[i - 1][c - 1] ? tablero[i - 1][c - 1] : false,
+                        tablero[i - 1][c + 1] ? tablero[i - 1][c + 1] : false,
+                        tablero[i - 1][c] ? tablero[i - 1][c] : false
+                    ]);
                 }
-                //esquinas inferiores
+                //colocamos las casillas inferiores
                 if (tablero[i + 1]) {
-                    // esquina iizq
-                    if (tablero[i + 1][c - 1] && tablero[i + 1][c - 1] === '*') {
-                        contador++;
-                    }
-                    // esquiba ider
-                    if (tablero[i + 1][c + 1] && tablero[i + 1][c + 1] === '*') {
-                        contador++;
-                    }
+                    casillas.push.apply(casillas, [
+                        tablero[i + 1][c - 1] ? tablero[i + 1][c - 1] : false,
+                        tablero[i + 1][c + 1] ? tablero[i + 1][c + 1] : false,
+                        tablero[i + 1][c] ? tablero[i + 1][c] : false
+                    ]);
                 }
-                result += contador;
+                // detectamos las minas
+                result += detectaMinas(casillas);
             } else {
                 result += '*';
             }
-
-            contador = 0;
         }
         result += '\n';
     }
-
     return result;
 };
+
 
 /**
  * Recibe el path del archivo para determinar si existe y es un archivo txt valido
@@ -134,7 +144,7 @@ const calcularMinas = (pathArchivo) => {
         let contenido = data.toString();
         if (!validarTablero(contenido)) {
             console.log('No se pudo calcular');
-            return;
+            return false;
         }
 
         let tablero = generaTablero(contenido);

@@ -3,6 +3,8 @@
 const { argv } = require('./config/comando');
 const path = require('path');
 const files = require('fs');
+const os = require('os');
+EOL = os.EOL;
 
 /**
  * Parsea sl string del tablero proveniente del txt
@@ -12,8 +14,12 @@ const parseTablero = (contenido) => {
     let tablero = [];
     if (contenido.includes('\r\n')) {
         tablero = contenido.split('\r\n');
-    } else {
+    } else if (contenido.includes('\n')) {
         tablero = contenido.split('\n');
+    } else if (contenido.includes('\r')) {
+        tablero = contenido.split('\r');
+    } else if (contenido.includes(EOL)) {
+        tablero = contenido.split(EOL);
     }
 
     return tablero;
@@ -128,14 +134,15 @@ const generaTablero = (contenido) => {
  * @param {string} pathArchivo 
  */
 const calcularMinas = (pathArchivo) => {
+    const pathReal = path.resolve(pathArchivo);
     // validamos el formato del archivo
-    const archivo = path.extname(pathArchivo);
+    const archivo = path.extname(pathReal);
     if (archivo !== '.txt') {
         console.log('El archivo no tiene formato permitido debe ser .txt');
         return;
     }
     // leer el archvio
-    files.readFile(pathArchivo, (err, data) => {
+    files.readFile(pathReal, (err, data) => {
         if (err) {
             console.log(`No se puedele leer el archivo`, err.code);
             return;

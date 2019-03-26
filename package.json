@@ -17,6 +17,7 @@
     },
     "homepage": "https://github.com/Andrew0914/buscaminas#readme",
     "dependencies": {
+        "mime-types": "^2.1.22",
         "yargs": "^13.2.2"
     },
     "devDependencies": {

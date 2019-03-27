@@ -37,7 +37,6 @@ const parseTablero = (contenido) => {
     } else if (contenido.includes(EOL)) {
         tablero = contenido.split(EOL);
     }
-
     return tablero;
 };
 
@@ -46,6 +45,10 @@ const parseTablero = (contenido) => {
  * @param {array} tablero
  */
 const validarTablero = (tablero) => {
+    if (tablero.length <= 0) {
+        console.log('No hay tablero para calcular');
+        return false;
+    }
     const cabecera = tablero[0].split(' ');
     // validamos que sean solo 2 dimensiones
     if (cabecera.length !== 2) {

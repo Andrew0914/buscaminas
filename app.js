@@ -4,16 +4,19 @@ const { leerTableroDeArchivo, parseTablero, validarTablero } = require('./compon
 const { generaTablero } = require('./components/buscaminas');
 
 const pathArgumento = argv._[0];
-
 const contenidoArchivo = leerTableroDeArchivo(pathArgumento);
 // se obtuvo contenido
 if (contenidoArchivo) {
     const tablero = parseTablero(contenidoArchivo);
-    console.log(tablero);
     // es un tablero valido
     if (validarTablero(tablero)) {
         // generamos el tablero de minas
-        console.log(generaTablero(tablero));
+        let tableroCalculado = generaTablero(tablero);
+        // print tablero
+        console.log('***** RESULTADO BUSCAMINAS ***** \n');
+        tableroCalculado.forEach(fila => {
+            console.log(fila);
+        });
     } else {
         console.log('No se pudo calcular el tablero');
     }

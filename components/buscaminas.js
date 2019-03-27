@@ -18,6 +18,7 @@ const detectaMinas = (casillas) => {
 const generaTablero = (tablero) => {
     tablero = tablero.splice(1, (tablero.length - 1));
     let result = '';
+    let matrizCalculada = [];
     for (let i = 0; i < tablero.length; i++) {
         let casillas = [];
         let fila = tablero[i].split('');
@@ -25,21 +26,21 @@ const generaTablero = (tablero) => {
             if (fila[c] === '.') {
                 // colocamos las casillas en un arreglo para que las valide en un ciclo
                 // colocamos las casillas de los lados
-                casillas = [fila[c + 1], fila[c - 1]];
+                casillas = [fila[c - 1], fila[c + 1]];
                 //colocamos las casillas superiores 
                 if (tablero[i - 1]) {
                     casillas.push.apply(casillas, [
                         tablero[i - 1][c - 1] ? tablero[i - 1][c - 1] : false,
-                        tablero[i - 1][c + 1] ? tablero[i - 1][c + 1] : false,
-                        tablero[i - 1][c] ? tablero[i - 1][c] : false
+                        tablero[i - 1][c] ? tablero[i - 1][c] : false,
+                        tablero[i - 1][c + 1] ? tablero[i - 1][c + 1] : false
                     ]);
                 }
                 //colocamos las casillas inferiores
                 if (tablero[i + 1]) {
                     casillas.push.apply(casillas, [
                         tablero[i + 1][c - 1] ? tablero[i + 1][c - 1] : false,
-                        tablero[i + 1][c + 1] ? tablero[i + 1][c + 1] : false,
-                        tablero[i + 1][c] ? tablero[i + 1][c] : false
+                        tablero[i + 1][c] ? tablero[i + 1][c] : false,
+                        tablero[i + 1][c + 1] ? tablero[i + 1][c + 1] : false
                     ]);
                 }
                 // detectamos las minas
@@ -48,9 +49,10 @@ const generaTablero = (tablero) => {
                 result += '*';
             }
         }
-        result += '\n';
+        matrizCalculada.push(result);
+        result = '';
     }
-    return result;
+    return matrizCalculada;
 };
 
 module.exports = {

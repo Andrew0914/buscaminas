@@ -4,7 +4,8 @@
     "description": "Calcula el tablero de buscaminas",
     "main": "app.js",
     "scripts": {
-        "test": "jest"
+        "test": "jest --verbose",
+        "test-coverage": "jest --coverage"
     },
     "repository": {
         "type": "git",
